@@ -15,7 +15,7 @@ import os
 st.set_page_config(layout="wide")
 
 # Get current session
-session = get_active_session()
+# session = get_active_session()
 
 connection_parameters = {
    "account": os.getenv("SF_ACCOUNT_IDENTIFIER"),
