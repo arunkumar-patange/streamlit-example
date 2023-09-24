@@ -22,7 +22,7 @@ connection_parameters = {
    "user": os.getenv("SF_USER"),
    "password": os.getenv("SF_PASSWORD"),
    "role": os.getenv("SF_ROLE"),  # optional
-   # "warehouse": os.getenv(),  # optional
+   "warehouse": os.getenv("SF_WAREHOUSE"),  # optional
    # "database": os.getenv(),  # optional
  }
 
