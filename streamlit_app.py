@@ -132,7 +132,7 @@ if query:
     uuids, scores = VectorStore.query(query)
     count, descriptions = load_data(config[environment], user_id, uuids)
     st.text(f"number of projects {count}")
-    st.table(descriptions, uuids)
+    st.table(descriptions)
 else:
     count, descriptions = load_data(config[environment], user_id)
     st.text(f"number of projects {count}")
