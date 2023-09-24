@@ -84,7 +84,7 @@ class VectorStore:
         return r
 
     @classmethod
-    def query(cls, query, top_k=1):
+    def query(cls, query, top_k=3):
         metadata = VectorStore.metadata
         queries = {
             "queries": [{
@@ -145,8 +145,9 @@ metadata = {
 VectorStore.metadata = metadata
 
 query = st.text_input('Similarity Search', 'plan my trip to europe')
+top_k = st.text_input('top_k', 3)
 if query:
-    uuids, scores = VectorStore.query(query)
+    uuids, scores = VectorStore.query(query, top_k=top_k)
     count, descriptions = load_data(config[environment], user_id, uuids)
     st.text(f"number of projects {count}")
     st.table(descriptions)
