@@ -42,7 +42,8 @@ config = {
 
 @st.cache_data()
 def load_data(env, user_id, uuids=None):
-    # Load CO2 emissions data
+
+    columns = ('created_at', 'description', 'name', 'attr_indexer', 'user_id',)
     table = session.table(env["descriptions"])
     if uuids:
         table = table.filter(col('uuid').in_(uuids))
@@ -53,7 +54,7 @@ def load_data(env, user_id, uuids=None):
         .filter(col('name') == 'studio_project')
         .filter(col('user_id') == user_id)
         .sort(col('created_at').desc())
-        .select([col(each) for each in ('name', 'user_id', 'description', 'created_at')])
+        .select([col(each) for each in columns])
     )
 
     return descriptions.count(), descriptions.to_pandas()
