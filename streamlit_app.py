@@ -31,9 +31,11 @@ session = Session.builder.configs(connection_parameters).create()
 config = {
     "production": {
         "descriptions": "BRAIN.RAW_MYSQL_BRAIN_USER.BRUS_REL_OBJECTS",
+        "user": "BRAIN.RAW_MYSQL_BRAIN_USER.BRUS_USER",
     },
     "staging": {
         "descriptions": "BRAIN_STAGING.RAW_STG_MYSQL_BRUS_BRAIN_USER_DEVELOPMENT.BRUS_REL_OBJECTS",
+        "user": "BRAIN_STAGING.RAW_STG_MYSQL_BRUS_BRAIN_USER_DEVELOPMENT.BRUS_USER",
     }
 }
 
@@ -112,6 +114,20 @@ class VectorStore:
 # Load and cache data
 environment = "staging"
 user_id = 246
+
+environment = st.selectbox("environment", ["staging", "production"])
+email = st.text_input("Email", "apatange+ai-dev2@brain.im")
+user = (
+    session
+    .table(config[environment]["user"])
+    .filter(col("email") == email)
+    .select(col("id"))
+    .to_pandas()
+)
+
+st.text(user["ID"][0])
+user_id = int(user["ID"][0])
+
 
 BRUS = os.getenv('BRUS') or "https://api-dev.braininc.net"
 RETRIEVAL = os.getenv('RETRIEVAL') or "https://api-dev.braininc.net/be/retrieval"
