@@ -7,6 +7,7 @@ from snowflake.snowpark.functions import sum, col
 from snowflake.snowpark import Session
 import altair as alt
 import streamlit as st
+import pandas as pd
 import logging
 import requests
 import os
@@ -40,10 +41,11 @@ config = {
 }
 
 
+columns = ('created_at', 'description', 'name', "uuid", 'attr_indexer', 'user_id',)
+
 @st.cache_data()
 def load_data(env, user_id, uuids=None):
 
-    columns = ('created_at', 'description', 'name', 'attr_indexer', 'user_id',)
     table = session.table(env["descriptions"])
     if uuids:
         table = table.filter(col('uuid').in_(uuids))
@@ -150,8 +152,11 @@ top_k = st.text_input('top_k', 3)
 if query:
     uuids, scores = VectorStore.query(query, top_k=top_k)
     count, descriptions = load_data(config[environment], user_id, uuids)
+    df = pd.DataFrame({'score': [scores[each] for each in descriptions["UUID"]]})
     st.text(f"number of projects {count}")
-    st.table(descriptions)
+    # st.table(descriptions)
+    st.table(descriptions.join(df).sort_values(by=['score'], ascending=False))
+    # st.dataframe(descriptions.join(df).sort_values(by=['score']))
 else:
     count, descriptions = load_data(config[environment], user_id)
     st.text(f"number of projects {count}")
