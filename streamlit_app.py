@@ -1,5 +1,10 @@
-from snowflake.snowpark.context import get_active_session
+#
+#
+#
+
+#from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import sum, col
+from snowflake.snowpark import Session
 import altair as alt
 import streamlit as st
 import logging
@@ -12,6 +17,17 @@ st.set_page_config(layout="wide")
 # Get current session
 session = get_active_session()
 
+connection_parameters = {
+   "account": os.getenv("SF_ACCOUNT_IDENTIFIER"),
+   "user": os.getenv("SF_USER"),
+   "password": os.getenv("SF_PASSWORD"),
+   "role": os.getenv("SF_ROLE"),  # optional
+   # "warehouse": os.getenv(),  # optional
+   # "database": os.getenv(),  # optional
+ }
+
+session = Session.builder.configs(connection_parameters).create()
+
 config = {
     "production": {
         "descriptions": "BRAIN.RAW_MYSQL_BRAIN_USER.BRUS_REL_OBJECTS",
@@ -20,6 +36,7 @@ config = {
         "descriptions": "BRAIN_STAGING.RAW_STG_MYSQL_BRUS_BRAIN_USER_DEVELOPMENT.BRUS_REL_OBJECTS",
     }
 }
+
 
 @st.cache_data()
 def load_data(env, user_id, uuids=None):
