@@ -148,7 +148,7 @@ metadata = {
 VectorStore.metadata = metadata
 
 query = st.text_input('Similarity Search', 'plan my trip to europe')
-top_k = st.text_input('top_k', 3)
+top_k = st.text_input('top_k', 2)
 if query:
     uuids, scores = VectorStore.query(query, top_k=top_k)
     count, descriptions = load_data(config[environment], user_id, uuids)
